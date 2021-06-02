@@ -2,7 +2,8 @@ const router = require('express').Router();
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken')
 const { registerValidation, loginValidation } = require('../common/validation')
-const { addUser, getUserByEmailID } = require('../db/userQueries')
+const { addUser, getUserByEmailID } = require('../db/AppUsersQueries')
+const { initializeTeam } = require('../common/teamService')
 
 
 
@@ -19,9 +20,7 @@ router.post('/register', async (req,res) => {
     } catch (error) {
         console.log(error);
         return res.status(400).send(error);
-    }
-    
-    
+    }    
 
     //Hash Password
     const salt = await bcrypt.genSalt(10);
@@ -34,10 +33,9 @@ router.post('/register', async (req,res) => {
         password: hashPassword
     };
 
-    console.log(newUser);
-
     try {
         const savedUser = await addUser(newUser);
+        await initializeTeam(savedUser);
         return res.send({user: savedUser})
     } catch (error) {
         console.log(error);
@@ -60,7 +58,7 @@ router.post('/login' , async (req,res) => {
     if(!validPassword) return res.status(400).send('Password is wrong');
 
     // Create and assign token
-    const token = jwt.sign({ _id : user._id },process.env.TOKEN_SECRET);
+    const token = jwt.sign({ user_id : user.id },process.env.TOKEN_SECRET);
 
     res.header('auth-token',token).send(token);
 
