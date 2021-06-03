@@ -10,6 +10,12 @@ const getAge = () => {
     )
   }
 
+const getRandomValueIncrease = () => {  
+    let increase = Math.random() * (100 - 10) + 10;
+    return Math.round((increase  + Number.EPSILON) * 100) / 100;
+
+}
+
 const createPlayer = async ( team_id , role) => {
 
     console.log("init player - " + role);
@@ -34,6 +40,14 @@ const createPlayer = async ( team_id , role) => {
 
 }
 
+const getPlayerNewMarketValue = async (player) => {
+    const oldMarketValue = parseFloat(player.marketvalue);
+
+    return ((100 + await getRandomValueIncrease()) / 100 ) * oldMarketValue
+
+}
+
 module.exports = {
-    createPlayer
+    createPlayer,
+    getPlayerNewMarketValue
 }

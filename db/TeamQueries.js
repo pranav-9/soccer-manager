@@ -17,7 +17,17 @@ const getTeamByUserID = async (user_id) => {
     return result.rows.length ? result.rows[0] : null;
 }
 
+const updateTeam = async ( team ) => {
+    const { id, name, country, value, budget_left } = team;
+    const result = await pool.query(
+        'UPDATE Team set name=$1, country=$2, value=$3, budget_left=$4 where id = $5 returning *' ,
+        [ name, country, value, budget_left , id]
+    );
+    return result.rows.length ? result.rows[0] : null;
+}
+
 module.exports = {
     addTeam,
-    getTeamByUserID
+    getTeamByUserID,
+    updateTeam
 }
