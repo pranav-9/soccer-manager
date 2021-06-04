@@ -40,5 +40,46 @@ const loginValidation = (data) => {
     return schema.validate(data);
 }
 
+const orderValidation = async (order) => {
+    const schema = Joi.object({
 
-module.exports = { registerValidation , loginValidation }
+        type: Joi.string()
+            .regex(/^(BUY|SELL)$/)
+            .required(),
+        
+        player_id : Joi.number().integer(),
+
+        price : Joi.number(),
+
+        order_id : Joi.number().integer()
+
+    })
+    .xor("price","order_id")
+    .xor("player_id","order_id")
+    .and("player_id","price")
+    ;
+
+    return schema.validate(order);
+}
+
+const updateTeamValidation = async (order) => {
+    const schema = Joi.object({
+
+        name: Joi.string(),
+        
+        country : Joi.string()
+
+    })
+    .or("name","country")
+    ;
+
+    return schema.validate(order);
+}
+
+
+module.exports = { 
+    registerValidation , 
+    loginValidation,
+    orderValidation,
+    updateTeamValidation
+}

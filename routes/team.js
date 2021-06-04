@@ -1,11 +1,10 @@
 const router = require('express').Router()
 const verify = require('../common/verifyToken')
-const { getTeamByUserID } = require('../db/TeamQueries')
+const { getTeamByUserID , updateTeam } = require('../db/TeamQueries')
 const { getPlayersByTeamID } = require('../db/PlayerQueries')
+const { updateTeamValidation } = require('../common/validation')
 
 router.get('/', verify ,async (req,res) => {
-    console.log(req.user);
-
 
     try {
         let team = await getTeamByUserID(req.user.user_id);
@@ -20,6 +19,21 @@ router.get('/', verify ,async (req,res) => {
 })
 
 router.patch('/', verify , async (req,res) => {
+
+    // Validation
+    const { value , error } = updateTeamValidation(req.body)
+    if(error) return res.status(400).send(error.details[0].message);  
+
+    try {
+        let team = await getTeamByUserID(req.user.user_id);
+        if(req.body.name) team['name'] = req.body.name;
+        if(req.body.country) team['country'] = req.body.country;
+        let updatedTeam = await updateTeam(team);
+        res.send(updatedTeam)
+    } catch (error) {
+        res.status(400).send(error)
+    }
+
     
 })
 

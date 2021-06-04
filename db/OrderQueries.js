@@ -26,10 +26,12 @@ const getOrdersByStatus = async ( status) => {
     return result.rows.length ? result.rows : null;
 }
 
-const updateOrderStatus = async ( order_id , status ) => {
+const updateOrderStatus = async ( order ) => {
+
+    const { id , status } = order;
     const result = await pool.query(
         'UPDATE "Order" set status = $1 where id = $2 returning *' ,
-        [ status , order_id ]
+        [ status , id ]
     );
     return result.rows.length ? result.rows : null;
 }

@@ -35,8 +35,9 @@ router.post('/register', async (req,res) => {
 
     try {
         const savedUser = await addUser(newUser);
+        res.send({user: savedUser});
         await initializeTeam(savedUser);
-        return res.send({user: savedUser})
+        return;
     } catch (error) {
         console.log(error);
         return res.status(400).send(error)        
