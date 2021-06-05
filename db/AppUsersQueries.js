@@ -9,6 +9,14 @@ const addUser = async (user) => {
     return result.rows.length ? result.rows[0] : null;
 }
 
+const getAllUsers = async () => {
+    const result = await pool.query(
+        'SELECT * FROM AppUsers' ,
+        [  ]
+    );
+    return result.rows.length ? result.rows : null;
+}
+
 const getUserByID = async (id) => {
     const result = await pool.query(
         'SELECT * FROM AppUsers where id = $1 ' ,
@@ -27,6 +35,7 @@ const getUserByEmailID = async (email) => {
 
 module.exports = {
     addUser,
+    getAllUsers,
     getUserByID,
     getUserByEmailID
 }

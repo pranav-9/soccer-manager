@@ -2,10 +2,28 @@ const router = require('express').Router();
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken')
 const { registerValidation, loginValidation } = require('../common/validation')
-const { addUser, getUserByEmailID } = require('../db/AppUsersQueries')
+const { addUser, getUserByEmailID, getAllUsers, getUserByID } = require('../db/AppUsersQueries')
 const { initializeTeam } = require('../common/teamService')
+const verify = require('../common/verifyToken')
 
 
+router.get('/', verify ,async (req,res) => {
+
+    try {
+
+        if (req.query.id == null) {
+            const users = await getAllUsers();
+            return res.send(users);                
+        } else {
+            const user = await getUserByID(req.query.id);
+            return res.send(user);  
+        }
+
+    } catch (error) {
+        res.status(400).send(error)
+    }
+
+})
 
 router.post('/register', async (req,res) => {
 
