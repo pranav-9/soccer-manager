@@ -23,16 +23,16 @@ const initializeTeam = async (user) => {
         console.log(savedTeam);
 
         for (let index = 0; index < 3; index++) {
-            await createPlayer(savedTeam.id,'gk');
+            await createPlayer(savedTeam.id,'GK');
         }
         for (let index = 0; index < 6; index++) {
-            await createPlayer(savedTeam.id,'def');
+            await createPlayer(savedTeam.id,'DEF');
         }
         for (let index = 0; index < 6; index++) {
-            await createPlayer(savedTeam.id,'mid');
+            await createPlayer(savedTeam.id,'MID');
         }
         for (let index = 0; index < 5; index++) {
-            await createPlayer(savedTeam.id,'att');
+            await createPlayer(savedTeam.id,'ATT');
         }
 
     } catch (error) {

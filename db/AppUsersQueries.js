@@ -1,10 +1,18 @@
 let pool = require('./connection')
 
 const addUser = async (user) => {
-    const { name, email , password } = user;
+    const { name, email , password , role } = user;
     const result = await pool.query(
-        'INSERT INTO AppUsers (name,email,password) VALUES ( $1 , $2 , $3 ) returning *' ,
-        [ name, email, password]
+        'INSERT INTO AppUsers (name,email,password,role) VALUES ( $1 , $2 , $3 , $4 ) returning *' ,
+        [ name, email, password, role]
+    );
+    return result.rows.length ? result.rows[0] : null;
+}
+
+const getUserByID = async (id) => {
+    const result = await pool.query(
+        'SELECT * FROM AppUsers where id = $1 ' ,
+        [ id ]
     );
     return result.rows.length ? result.rows[0] : null;
 }
@@ -19,5 +27,6 @@ const getUserByEmailID = async (email) => {
 
 module.exports = {
     addUser,
+    getUserByID,
     getUserByEmailID
 }

@@ -76,10 +76,26 @@ const updateTeamValidation = async (order) => {
     return schema.validate(order);
 }
 
+const updatePlayerValidation = async (order) => {
+    const schema = Joi.object({
+
+        firstname: Joi.string(),
+
+        lastname: Joi.string(),
+        
+        country : Joi.string()
+
+    })
+    .or("firstname","lastname","country")
+    ;
+
+    return schema.validate(order);
+}
 
 module.exports = { 
     registerValidation , 
     loginValidation,
     orderValidation,
-    updateTeamValidation
+    updateTeamValidation,
+    updatePlayerValidation
 }

@@ -26,6 +26,14 @@ const getOrdersByStatus = async ( status) => {
     return result.rows.length ? result.rows : null;
 }
 
+const getOrdersByPlayerIDandStatus = async ( player_id, status) => {
+    const result = await pool.query(
+        'SELECT * FROM "Order" where status = $1 and player_id = $2' ,
+        [ status , player_id]
+    );
+    return result.rows.length ? result.rows : null;
+}
+
 const updateOrderStatus = async ( order ) => {
 
     const { id , status } = order;
@@ -40,5 +48,6 @@ module.exports = {
     createOrder,
     getOrderByID,
     getOrdersByStatus,
-    updateOrderStatus
+    updateOrderStatus,
+    getOrdersByPlayerIDandStatus
 }

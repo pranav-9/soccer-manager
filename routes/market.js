@@ -1,24 +1,25 @@
 const router = require('express').Router()
 const verify = require('../common/verifyToken')
 const { getPlayerByID } = require('../db/PlayerQueries')
+const { getTeamByID } = require('../db/TeamQueries')
 const { getOrdersByStatus } = require('../db/OrderQueries')
 
 router.get('/', verify ,async (req,res) => {
-
     
     try {
-
         let created_orders = await getOrdersByStatus("CREATED");        
-        console.log(created_orders);
+        // console.log(created_orders);
         let market = []
         for (let index = 0; index < created_orders.length; index++) {
             const element = created_orders[index];
-            let playerInfo = await getPlayerByID(element.player_id)
+            let playerInfo = await getPlayerByID(element.player_id);
+            let teamInfo = await getTeamByID(playerInfo.team_id);
             element["player_info"] = playerInfo            
             const playerInMarket = {
                 order_id: element['id'],
                 firstname: playerInfo.firstname,
                 lastname: playerInfo.lastname,
+                team: teamInfo.name,
                 age: playerInfo.age,
                 role: playerInfo.role,
                 type: element['type'],

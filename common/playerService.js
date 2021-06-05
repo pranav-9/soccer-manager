@@ -28,6 +28,7 @@ const createPlayer = async ( team_id , role) => {
             team_id: team_id,
             firstname: randomPerson.name.first,
             lastname: randomPerson.name.last,
+            country: randomPerson.location.country,
             age: await getAge(),
             role:role,
             marketvalue:1000000
