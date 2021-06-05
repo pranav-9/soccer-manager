@@ -17,7 +17,7 @@ module.exports = async (req,res,next) => {
         const is_allowed = await hasPermissionToAccess(user.role,entityRequested, req.method);
         if (is_allowed==null || !is_allowed.is_allowed) throw("Do not have permission to access")
 
-        req.user = verified;
+        req.user = user;
         next();
     } catch (error) {
         console.log(error);

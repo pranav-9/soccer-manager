@@ -7,7 +7,7 @@ const { updateTeamValidation } = require('../common/validation')
 router.get('/', verify ,async (req,res) => {
 
     try {
-        let team = await getTeamByUserID(req.user.user_id);
+        let team = await getTeamByUserID(req.user.id);
         let players = await getPlayersByTeamID(team.id);
         if( players == null ) throw "Team Players not found";
         team['players'] = players;
@@ -25,7 +25,7 @@ router.patch('/', verify , async (req,res) => {
     if(error) return res.status(400).send(error.details[0].message);  
 
     try {
-        let team = await getTeamByUserID(req.user.user_id);
+        let team = await getTeamByUserID(req.user.id);
         if(req.body.name) team['name'] = req.body.name;
         if(req.body.country) team['country'] = req.body.country;
         let updatedTeam = await updateTeam(team);

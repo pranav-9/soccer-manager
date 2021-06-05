@@ -76,20 +76,25 @@ const updateTeamValidation = async (order) => {
     return schema.validate(order);
 }
 
-const updatePlayerValidation = async (order) => {
+const updatePlayerValidation = (data) => {
     const schema = Joi.object({
 
         firstname: Joi.string(),
 
         lastname: Joi.string(),
         
-        country : Joi.string()
+        country : Joi.string(),
+
+        age: Joi.number().integer(),
+
+        role: Joi.string()
+        .regex(/^(GK|DEF|MID|ATT)$/)
 
     })
-    .or("firstname","lastname","country")
+    .or("firstname","lastname","country","age","role")
     ;
 
-    return schema.validate(order);
+    return schema.validate(data);
 }
 
 module.exports = { 

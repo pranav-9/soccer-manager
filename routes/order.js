@@ -29,7 +29,7 @@ router.post('/' , verify , async(req,res) => {
         console.log(sellOrder);
 
         // check if buyer has enough money
-        let buyerTeam = await getTeamByUserID(req.user.user_id);
+        let buyerTeam = await getTeamByUserID(req.user.id);
         if (buyerTeam == null ) throw "Bad Request"
         let askingPrice = parseFloat(sellOrder.price);
         if (askingPrice > parseFloat(buyerTeam.budget_left)) return res.send("Not enough budget to buy player")
@@ -39,7 +39,7 @@ router.post('/' , verify , async(req,res) => {
 
         //create buy order
         let order = {
-            user_id: req.user.user_id,
+            user_id: req.user.id,
             type: req.body.type,
             price: askingPrice,
             player_id: sellOrder.player_id,

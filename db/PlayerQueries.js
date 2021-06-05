@@ -18,6 +18,14 @@ const getPlayerByID = async (id) => {
     return result.rows.length ? result.rows[0] : null;
 }
 
+const getAllPlayers = async () => {
+    const result = await pool.query(
+        'SELECT * FROM Player' ,
+        [ ]
+    );
+    return result.rows.length ? result.rows : null;
+}
+
 const getPlayersByTeamID = async (team_id) => {
     const result = await pool.query(
         'SELECT * FROM Player where team_id = $1 ' ,
@@ -41,6 +49,7 @@ const updatePlayer = async ( player ) => {
 module.exports = {
     addPlayer,
     getPlayerByID,
+    getAllPlayers,
     getPlayersByTeamID,
     updatePlayer
 }

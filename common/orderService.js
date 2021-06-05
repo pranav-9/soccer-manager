@@ -9,7 +9,7 @@ const processSellOrder = async (req) => {
     if (orderAlreadyExists != null) throw "Player already in market"
 
     let order = {
-        user_id: req.user.user_id,
+        user_id: req.user.id,
         type: req.body.type,
         price: req.body.price,
         player_id: player_id,
