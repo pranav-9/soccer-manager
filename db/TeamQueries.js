@@ -17,6 +17,14 @@ const getTeamByID = async (id) => {
     return result.rows.length ? result.rows[0] : null;
 }
 
+const getAllTeams = async () => {
+    const result = await pool.query(
+        'SELECT * FROM Team ' ,
+        [  ]
+    );
+    return result.rows.length ? result.rows : null;
+}
+
 const getTeamByUserID = async (user_id) => {
     const result = await pool.query(
         'SELECT * FROM Team where user_id = $1 ' ,
@@ -37,6 +45,7 @@ const updateTeam = async ( team ) => {
 module.exports = {
     addTeam,
     getTeamByID,
+    getAllTeams,
     getTeamByUserID,
     updateTeam
 }

@@ -76,6 +76,24 @@ const updateTeamValidation = async (order) => {
     return schema.validate(order);
 }
 
+const addTeamValidation = (order) => {
+    const schema = Joi.object({
+
+        user_id: Joi.number().integer(),
+
+        name: Joi.string().required(),
+        
+        country : Joi.string(),
+
+        value: Joi.number(),
+        
+        budget_left: Joi.number()
+
+    });
+
+    return schema.validate(order);
+}
+
 const updatePlayerValidation = (data) => {
     const schema = Joi.object({
 
@@ -88,10 +106,37 @@ const updatePlayerValidation = (data) => {
         age: Joi.number().integer(),
 
         role: Joi.string()
-        .regex(/^(GK|DEF|MID|ATT)$/)
+        .regex(/^(GK|DEF|MID|ATT)$/),
+
+        marketvalue: Joi.number()
 
     })
     .or("firstname","lastname","country","age","role")
+    ;
+
+    return schema.validate(data);
+}
+
+const newPlayerValidation = (data) => {
+    const schema = Joi.object({
+
+        team_id: Joi.number().integer(),
+
+        firstname: Joi.string().required(),
+
+        lastname: Joi.string(),
+        
+        country : Joi.string(),
+
+        age: Joi.number().integer(),
+
+        role: Joi.string()
+        .regex(/^(GK|DEF|MID|ATT)$/)
+        .required(),
+
+        marketvalue: Joi.number().integer().default(1000000)
+
+    })
     ;
 
     return schema.validate(data);
@@ -101,6 +146,8 @@ module.exports = {
     registerValidation , 
     loginValidation,
     orderValidation,
+    addTeamValidation,
     updateTeamValidation,
-    updatePlayerValidation
+    updatePlayerValidation,
+    newPlayerValidation
 }

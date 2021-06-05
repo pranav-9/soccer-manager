@@ -13,13 +13,20 @@ router.get('/', verify ,async (req,res) => {
         for (let index = 0; index < created_orders.length; index++) {
             const element = created_orders[index];
             let playerInfo = await getPlayerByID(element.player_id);
-            let teamInfo = await getTeamByID(playerInfo.team_id);
+            let team = null
+            if (playerInfo.team_id != null) {
+                let teamInfo = await getTeamByID(playerInfo.team_id);
+                team = teamInfo.name;
+            }
+
+                
+            
             element["player_info"] = playerInfo            
             const playerInMarket = {
                 order_id: element['id'],
                 firstname: playerInfo.firstname,
                 lastname: playerInfo.lastname,
-                team: teamInfo.name,
+                team: team,
                 age: playerInfo.age,
                 role: playerInfo.role,
                 type: element['type'],
