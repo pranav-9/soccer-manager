@@ -31,10 +31,10 @@ const updatePlayer = async ( player ) => {
     const { id , team_id, firstname, lastname, country, age, role, marketvalue } = player;
 
     const result = await pool.query(
-        'UPDATE Player set team_id=$1,firstname=$2,lastname=$3,country=$4,age=$4,role=$5,marketvalue=$6 where id = $7' ,
+        'UPDATE Player set team_id=$1,firstname=$2,lastname=$3,country=$4,age=$5,role=$6,marketvalue=$7 where id = $8 returning *' ,
         [ team_id, firstname, lastname, country, age, role, marketvalue , id]
     );
-    return result.rows.length ? result.rows : null;
+    return result.rows.length ? result.rows[0] : null;
 }
 
 

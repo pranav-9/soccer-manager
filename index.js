@@ -6,6 +6,7 @@ const authRoute = require('./routes/auth');
 const teamRoute = require('./routes/team')
 const orderRouter = require('./routes/order')
 const marketRouter = require('./routes/market')
+const playerRouter = require('./routes/player')
 
 // Middleware
 app.use(express.json()); 
@@ -14,5 +15,6 @@ app.use('/api/user',authRoute);
 app.use('/api/team',teamRoute);
 app.use('/api/order', orderRouter);
 app.use('/api/market', marketRouter);
+app.use('/api/player', playerRouter);
 
 app.listen(3000, () => console.log("Server is up and running"));

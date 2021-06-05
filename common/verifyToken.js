@@ -13,6 +13,7 @@ module.exports = async (req,res,next) => {
 
         const user = await getUserByID(verified.user_id);
         let entityRequested = req.baseUrl.split("/api/")[1];        
+        console.log(entityRequested,user.role,req.method);
         const is_allowed = await hasPermissionToAccess(user.role,entityRequested, req.method);
         if (is_allowed==null || !is_allowed.is_allowed) throw("Do not have permission to access")
 
