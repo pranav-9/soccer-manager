@@ -33,9 +33,18 @@ const getUserByEmailID = async (email) => {
     return result.rows.length ? result.rows[0] : null;
 }
 
+const deleteUserByID = async (id) => {
+    const result = await pool.query(
+        'DELETE FROM AppUsers where id = $1 returning *' ,
+        [ id ]
+    );
+    return result.rows.length ? result.rows[0] : null;
+}
+
 module.exports = {
     addUser,
     getAllUsers,
     getUserByID,
-    getUserByEmailID
+    getUserByEmailID,
+    deleteUserByID
 }

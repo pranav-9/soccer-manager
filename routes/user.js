@@ -2,9 +2,10 @@ const router = require('express').Router();
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken')
 const { registerValidation, loginValidation } = require('../common/validation')
-const { addUser, getUserByEmailID, getAllUsers, getUserByID } = require('../db/AppUsersQueries')
-const { initializeTeam } = require('../common/teamService')
-const verify = require('../common/verifyToken')
+const { addUser, getUserByEmailID, getAllUsers, getUserByID, deleteUserByID } = require('../db/AppUsersQueries')
+const { initializeTeam , deleteTeam } = require('../common/teamService')
+const verify = require('../common/verifyToken');
+const { getTeamByUserID } = require('../db/TeamQueries');
 
 
 router.get('/', verify ,async (req,res) => {
@@ -83,6 +84,30 @@ router.post('/login' , async (req,res) => {
     res.header('auth-token',token).send(token);
 
 
+
+})
+
+router.delete('/' ,verify , async (req,res) => {
+
+    try {
+        
+        if (req.query.id == null) throw "Please specify user to delete";
+
+        //delete team
+        const team = await getTeamByUserID(req.query.id);
+        console.log(team);
+        if (team != null) {
+            const deletedTeam = await deleteTeam(team.id);    
+            console.log(deletedTeam);
+        }        
+
+        const deletedUser = await deleteUserByID(req.query.id);
+        
+        return res.send(deletedUser);              
+
+    } catch (error) {
+        res.status(400).send(error);        
+    }
 
 })
 

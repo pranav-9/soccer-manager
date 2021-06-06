@@ -12,6 +12,8 @@ module.exports = async (req,res,next) => {
         if(verified == null || verified.user_id == null ) throw 'Could not identify User'
 
         const user = await getUserByID(verified.user_id);
+        if (user == null) throw "User no longer exists";
+        
         let entityRequested = req.baseUrl.split("/api/")[1];        
         console.log(entityRequested,user.role,req.method);
         const is_allowed = await hasPermissionToAccess(user.role,entityRequested, req.method);
