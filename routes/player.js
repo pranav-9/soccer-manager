@@ -3,7 +3,8 @@ const verify = require('../common/verifyToken')
 const { updatePlayerValidation , newPlayerValidation } = require('../common/validation')
 const { addPlayer , getPlayerByID , getAllPlayers , updatePlayer, deletePlayerByID} = require('../db/PlayerQueries')
 const { getTeamByUserID } = require('../db/TeamQueries')
-const { createOrder, getOrdersByPlayerIDandStatus, deleteOrderByID } = require('../db/OrderQueries')
+const { createOrder } = require('../db/OrderQueries')
+const { deletePlayer } = require('../common/playerService')
 
 // only accessible by admin
 router.get('/',verify , async (req,res) => {
@@ -89,21 +90,8 @@ router.patch('/', verify , async (req,res) => {
 router.delete('/' , verify , async (req,res) => { 
 
     try {
-        
-        if (req.query.id == null) throw "Please specify player to delete";
-
-        //delete pending orders of this player
-        const orders = await getOrdersByPlayerIDandStatus(req.query.id,'CREATED')
-        console.log(orders);
-        for (let index = 0; index < orders.length; index++) {
-            const order = orders[index];
-            await deleteOrderByID(order.id)            
-        }
-
-        const player = await deletePlayerByID(req.query.id);
-        return res.send(player);       
-       
-
+        const deletedPlayer = await deletePlayer(req.query.id);        
+        return res.send(deletedPlayer)      
     } catch (error) {
         res.status(400).send(error);        
     }

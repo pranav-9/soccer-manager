@@ -1,5 +1,7 @@
-const { addPlayer } = require("../db/PlayerQueries")
+const { addPlayer, deletePlayerByID} = require("../db/PlayerQueries")
+const { getOrdersByPlayerIDandStatus, deleteOrderByID } = require("../db/OrderQueries")
 const axios = require('axios')
+const { getTeamByID, updateTeam } = require("../db/TeamQueries")
 
 /**
  * Returns a random number between min (inclusive) and max (exclusive)
@@ -48,7 +50,40 @@ const getPlayerNewMarketValue = async (player) => {
 
 }
 
+const deletePlayerOrders = async (player_id) => {
+
+    //delete pending orders of this player
+    const orders = await getOrdersByPlayerIDandStatus(player_id,'CREATED');
+    console.log(orders);
+
+    if (orders == null) return;
+
+    for (let index = 0; index < orders.length; index++) {
+        const order = orders[index];
+        await deleteOrderByID(order.id)            
+    }
+
+}
+
+const deletePlayer = async (id) => {
+
+    if (id == null) throw "Please specify player to delete";
+    
+    await deletePlayerOrders(id);
+    const player = await deletePlayerByID(id);
+
+    // update team value
+    console.log(player);
+    let team = await getTeamByID(player.team_id);
+    team['value'] = parseFloat(team.value) - parseFloat(player.marketvalue);
+    await updateTeam(team);
+
+    return player;     
+
+}
+
 module.exports = {
     createPlayer,
-    getPlayerNewMarketValue
+    getPlayerNewMarketValue,
+    deletePlayer
 }

@@ -3,6 +3,7 @@ const verify = require('../common/verifyToken')
 const { addTeam ,getTeamByUserID , getAllTeams ,updateTeam, getTeamByID } = require('../db/TeamQueries')
 const { getPlayersByTeamID } = require('../db/PlayerQueries')
 const { updateTeamValidation, addTeamValidation } = require('../common/validation')
+const { deleteTeam } = require('../common/teamService')
 
 router.get('/', verify ,async (req,res) => {
 
@@ -64,6 +65,23 @@ router.patch('/', verify , async (req,res) => {
     }
 
     
+})
+
+router.delete('/' , verify , async (req,res) => { 
+
+    try {
+        
+        if (req.query.id == null) throw "Please specify team to delete";
+
+        const deletedTeam = await deleteTeam(req.query.id);
+        
+        return res.send(deletedTeam);       
+       
+
+    } catch (error) {
+        res.status(400).send(error);        
+    }
+
 })
 
 module.exports = router;

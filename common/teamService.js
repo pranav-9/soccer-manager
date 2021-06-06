@@ -1,5 +1,6 @@
-const { addTeam } = require("../db/TeamQueries")
-const { createPlayer } = require('./playerService')
+const { getPlayersByTeamID } = require("../db/PlayerQueries");
+const { addTeam, deleteTeamByID } = require("../db/TeamQueries");
+const { createPlayer, deletePlayer } = require('./playerService')
 
 const initializeTeam = async (user) => {
 
@@ -47,6 +48,26 @@ const initializeTeam = async (user) => {
 
 }
 
+const deleteTeam = async (team_id) => {
+
+    let players = await getPlayersByTeamID(team_id);
+
+    console.log(players);
+    if (players != null) {
+        for (let index = 0; index < players.length; index++) {
+            const player = players[index];
+            await deletePlayer(player.id);
+        }
+    }
+
+    
+
+    const deletedTeam = await deleteTeamByID(team_id);
+
+    return deletedTeam;     
+}
+
 module.exports = {
-    initializeTeam
+    initializeTeam,
+    deleteTeam
 }
