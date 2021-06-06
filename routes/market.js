@@ -24,6 +24,7 @@ router.get('/', verify ,async (req,res) => {
             element["player_info"] = playerInfo            
             const playerInMarket = {
                 order_id: element['id'],
+                player_id: playerInfo.id,
                 firstname: playerInfo.firstname,
                 lastname: playerInfo.lastname,
                 team: team,

@@ -44,10 +44,19 @@ const updateOrderStatus = async ( order ) => {
     return result.rows.length ? result.rows : null;
 }
 
+const deleteOrderByID = async ( id ) => {
+    const result = await pool.query(
+        'DELETE FROM "Order" where id = $1 returning *' ,
+        [ id ]
+    );
+    return result.rows.length ? result.rows : null;
+}
+
 module.exports = {
     createOrder,
     getOrderByID,
     getOrdersByStatus,
     updateOrderStatus,
-    getOrdersByPlayerIDandStatus
+    getOrdersByPlayerIDandStatus,
+    deleteOrderByID
 }

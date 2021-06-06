@@ -45,11 +45,19 @@ const updatePlayer = async ( player ) => {
     return result.rows.length ? result.rows[0] : null;
 }
 
+const deletePlayerByID = async (id) => {
+    const result = await pool.query(
+        'DELETE FROM Player where id = $1 returning *' ,
+        [ id ]
+    );
+    return result.rows.length ? result.rows[0] : null;
+}
 
 module.exports = {
     addPlayer,
     getPlayerByID,
     getAllPlayers,
     getPlayersByTeamID,
-    updatePlayer
+    updatePlayer,
+    deletePlayerByID
 }
