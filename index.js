@@ -18,3 +18,5 @@ app.use('/api/market', marketRouter);
 app.use('/api/player', playerRouter);
 
 app.listen(3000, () => console.log("Server is up and running"));
+
+module.exports = app // for testing
