@@ -51,7 +51,7 @@ describe('User Registration', () => {
             .end((err, res) => {
                     res.should.have.status(200);
                     user_token = res.text;
-                    console.log(user_token,getUserToken());
+                    // console.log(user_token,getUserToken());
                 done();
             });
         });

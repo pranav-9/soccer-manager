@@ -101,6 +101,8 @@ const addTeamValidation = (order) => {
 const updatePlayerValidation = (data) => {
     const schema = Joi.object({
 
+        team_id: Joi.number(),
+
         firstname: Joi.string(),
 
         lastname: Joi.string(),

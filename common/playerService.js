@@ -54,12 +54,13 @@ const deletePlayerOrders = async (player_id) => {
 
     //delete pending orders of this player
     const orders = await getOrdersByPlayerIDandStatus(player_id,'CREATED');
-    console.log(orders);
+    // console.log(orders);
 
     if (orders == null) return;
 
     for (let index = 0; index < orders.length; index++) {
         const order = orders[index];
+        console.log("deleting orderID : " + order.id);
         await deleteOrderByID(order.id)            
     }
 
@@ -73,10 +74,14 @@ const deletePlayer = async (id) => {
     const player = await deletePlayerByID(id);
 
     // update team value
-    console.log("deleting player : " + player.name);
-    let team = await getTeamByID(player.team_id);
-    team['value'] = parseFloat(team.value) - parseFloat(player.marketvalue);
-    await updateTeam(team);
+    console.log("deleting player : " + player.firstname);
+
+    if (player.team_id != null) {
+        let team = await getTeamByID(player.team_id);
+        team['value'] = parseFloat(team.value) - parseFloat(player.marketvalue);
+        await updateTeam(team);    
+    }
+    
 
     return player;     
 

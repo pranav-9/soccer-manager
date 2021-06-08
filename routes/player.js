@@ -29,7 +29,7 @@ router.post('/' , verify , async (req,res) => {
     const { value , error } = newPlayerValidation(req.body)
     if(error) return res.status(400).send(error.details[0].message); 
     
-    console.log(req.body);
+    // console.log(req.body);
 
     try {
         let newPlayer = await addPlayer(req.body);

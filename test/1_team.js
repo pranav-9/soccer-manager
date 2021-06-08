@@ -8,12 +8,13 @@ let server = require('../index');
 let should = chai.should();
 
 // const admin_token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjo5LCJpYXQiOjE2MjMwNTgwMjl9.z9essSBzgdvi1srIJw2u-Oq1hE-TQ9vymAHJ4X4YgyU';
-let { getUserToken, getAdminToken } = require('./AppUser')
+let { getUserToken, getAdminToken } = require('./0_AppUser')
 // const user_token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxMCwiaWF0IjoxNjIzMDc3MjI3fQ.xgpnhhnxvLvcvvZlWEC7DKdMZhT1I5hj69F696nRnr8';
 const wrong_token = 'wrong';
 let team_id = null;
 let user_token = null;
 let admin_token = null;
+let user_player_id = null;
 
 
 chai.use(chaiHttp);
@@ -23,7 +24,7 @@ describe('Team Unit Testing', () => {
     before( (done) => { 
         user_token = getUserToken();
         admin_token = getAdminToken();
-        console.log(" tokens : ", user_token, admin_token);
+        // console.log(" tokens : ", user_token, admin_token);
         done()
     });  
     
@@ -59,6 +60,7 @@ describe('Team Unit Testing', () => {
                     res.body.should.have.property('budget_left');
                     res.body.should.have.property('created_at');
                     res.body.should.have.property('players'); 
+                user_player_id = res.body.players[0].id;
                 done();
             });
         });
@@ -193,3 +195,11 @@ describe('Team Unit Testing', () => {
     });
 
 });
+
+const getUserPlayerID = () => {
+    return user_player_id;
+}
+
+module.exports = {
+    getUserPlayerID
+}
