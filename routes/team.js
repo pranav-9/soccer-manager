@@ -55,12 +55,33 @@ router.patch('/', verify , async (req,res) => {
     if(error) return res.status(400).send(error.details[0].message);  
 
     try {
-        let team = await getTeamByUserID(req.user.id);
+
+        let team = null;
+        if (req.user.role === 'ADMIN') {
+            if (req.query.id == null) {
+                throw "Please provide team id"               
+            } else {
+                team = await getTeamByID(req.query.id);
+            }
+        } else {
+            team = await getTeamByUserID(req.user.id);
+        }
+        
         if(req.body.name) team['name'] = req.body.name;
         if(req.body.country) team['country'] = req.body.country;
+        if(req.body.user_id) {
+            if(req.user.role !== 'ADMIN') throw "You cannot change user_id of team"
+            team['user_id'] = req.body.user_id;
+        }
+        if(req.body.budget_left != null) {
+            if(req.user.role !== 'ADMIN') throw "You cannot change budget_left of team"
+            team['budget_left'] = req.body.budget_left;
+        }
+
         let updatedTeam = await updateTeam(team);
         res.send(updatedTeam)
     } catch (error) {
+        console.log(error);
         res.status(400).send(error)
     }
 

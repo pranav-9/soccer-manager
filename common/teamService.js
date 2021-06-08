@@ -52,7 +52,7 @@ const deleteTeam = async (team_id) => {
 
     let players = await getPlayersByTeamID(team_id);
 
-    console.log(players);
+    // console.log(players);
     if (players != null) {
         for (let index = 0; index < players.length; index++) {
             const player = players[index];

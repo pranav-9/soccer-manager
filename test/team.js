@@ -5,10 +5,15 @@ process.env.NODE_ENV = 'test';
 let chai = require('chai');
 let chaiHttp = require('chai-http');
 let server = require('../index');
+let should = chai.should();
 
-const admin_token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjo5LCJpYXQiOjE2MjMwNTgwMjl9.z9essSBzgdvi1srIJw2u-Oq1hE-TQ9vymAHJ4X4YgyU';
-const user_token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxMCwiaWF0IjoxNjIzMDc3MjI3fQ.xgpnhhnxvLvcvvZlWEC7DKdMZhT1I5hj69F696nRnr8';
+// const admin_token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjo5LCJpYXQiOjE2MjMwNTgwMjl9.z9essSBzgdvi1srIJw2u-Oq1hE-TQ9vymAHJ4X4YgyU';
+let { getUserToken, getAdminToken } = require('./AppUser')
+// const user_token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoxMCwiaWF0IjoxNjIzMDc3MjI3fQ.xgpnhhnxvLvcvvZlWEC7DKdMZhT1I5hj69F696nRnr8';
 const wrong_token = 'wrong';
+let team_id = null;
+let user_token = null;
+let admin_token = null;
 
 
 chai.use(chaiHttp);
@@ -16,11 +21,15 @@ chai.use(chaiHttp);
 describe('Team Unit Testing', () => {
 
     before( (done) => { 
+        user_token = getUserToken();
+        admin_token = getAdminToken();
+        console.log(" tokens : ", user_token, admin_token);
         done()
     });  
     
     describe('/Get teams - admin', () => {
-        it('get all teams -admin', (done) => {            
+        it('get all teams -admin', (done) => {       
+            console.log(admin_token);     
             chai.request(server)
                 .get('/api/team')
                 .set({ "auth-token": admin_token })
@@ -49,7 +58,7 @@ describe('Team Unit Testing', () => {
                     res.body.should.have.property('value');
                     res.body.should.have.property('budget_left');
                     res.body.should.have.property('created_at');
-                    res.body.should.have.property('players');               
+                    res.body.should.have.property('players'); 
                 done();
             });
         });
@@ -107,10 +116,80 @@ describe('Team Unit Testing', () => {
                     res.body.should.have.property('country').eql('INDIA');
                     res.body.should.have.property('value').eql('0');
                     res.body.should.have.property('budget_left').eql('0');
+                    team_id = res.body.id;
                 done();
             });
         });
     });
 
+    describe('/Patch team - admin', () => {
+        it('patch team by admin token', (done) => {     
+            let team = {
+                name: "team_name_junit_patched",
+                country: "SPAIN",
+                budget_left: 500
+        };       
+        chai.request(server)
+            .patch('/api/team')
+            .set({ "auth-token": admin_token })
+            .query({"id": team_id})
+            .send(team)
+            .end((err, res) => {
+                    // console.log(res.body);
+                    // console.log(res.text);
+                    res.should.have.status(200);
+                    res.body.should.be.a('object');
+                    res.body.should.have.property('id');
+                    res.body.should.have.property('user_id').eql(null);
+                    res.body.should.have.property('name').eql('team_name_junit_patched');
+                    res.body.should.have.property('country').eql('SPAIN');
+                    res.body.should.have.property('value').eql('0');
+                    res.body.should.have.property('budget_left').eql('500');
+                done();
+            });
+        });
+    });
+
+    describe('/Patch team - user', () => {
+        it('patch team by user token', (done) => {     
+            let team = {
+                name: "team_name_junit_patched",
+                country: "SPAIN"
+        };       
+        chai.request(server)
+            .patch('/api/team')
+            .set({ "auth-token": user_token })
+            .send(team)
+            .end((err, res) => {
+                    // console.log(res.body);
+                    // console.log(res.text);
+                    res.should.have.status(200);
+                    res.body.should.be.a('object');
+                    res.body.should.have.property('id');
+                    res.body.should.have.property('name').eql('team_name_junit_patched');
+                    res.body.should.have.property('country').eql('SPAIN');
+                    res.body.should.have.property('value').eql('20000000');
+                    res.body.should.have.property('budget_left').eql('5000000');
+                done();
+            });
+        });
+    });
+
+    describe('/delete team - admin', () => {
+        it('delete team by admin token', (done) => {   
+        chai.request(server)
+            .delete('/api/team')
+            .set({ "auth-token": admin_token })
+            .query({"id": team_id})
+            .send()
+            .end((err, res) => {
+                    console.log(res.body);
+                    // console.log(res.text);
+                    res.should.have.status(200);
+                    res.body.should.be.a('object');
+                done();
+            });
+        });
+    });
 
 });

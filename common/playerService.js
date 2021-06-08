@@ -73,7 +73,7 @@ const deletePlayer = async (id) => {
     const player = await deletePlayerByID(id);
 
     // update team value
-    console.log(player);
+    console.log("deleting player : " + player.name);
     let team = await getTeamByID(player.team_id);
     team['value'] = parseFloat(team.value) - parseFloat(player.marketvalue);
     await updateTeam(team);

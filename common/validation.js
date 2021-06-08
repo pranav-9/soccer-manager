@@ -62,12 +62,16 @@ const orderValidation = async (order) => {
     return schema.validate(order);
 }
 
-const updateTeamValidation = async (order) => {
+const updateTeamValidation = (order) => {
     const schema = Joi.object({
 
         name: Joi.string(),
         
-        country : Joi.string()
+        country : Joi.string(),
+
+        user_id: Joi.number().integer(),
+         
+        budget_left: Joi.number()
 
     })
     .or("name","country")
