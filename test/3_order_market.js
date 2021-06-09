@@ -63,9 +63,8 @@ describe('Order Unit Testing', () => {
             .get('/api/market')
             .set({ "auth-token": user_token })
             .send()
-            .timeout(5000)
             .end((err, res) => {
-                    // console.log(res.body);
+                    console.log(res.body);
                     // console.log(res.text);
                     res.should.have.status(200);
                     res.body.should.be.a('array');            
