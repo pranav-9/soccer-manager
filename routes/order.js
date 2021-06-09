@@ -63,7 +63,7 @@ router.post('/' , verify , async(req,res) => {
         buyerTeam.budget_left = parseFloat(buyerTeam.budget_left) - askingPrice;
         buyerTeam.value = parseFloat(buyerTeam.value) + newValue;
         console.log(buyerTeam);
-        await updateTeam(buyerTeam)
+        await updateTeam(buyerTeam);
         
         //update seller team
         let sellerTeam = await getTeamByUserID(sellOrder.user_id);

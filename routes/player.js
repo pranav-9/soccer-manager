@@ -2,7 +2,7 @@ const router = require('express').Router()
 const verify = require('../common/verifyToken')
 const { updatePlayerValidation , newPlayerValidation } = require('../common/validation')
 const { addPlayer , getPlayerByID , getAllPlayers , updatePlayer, deletePlayerByID} = require('../db/PlayerQueries')
-const { getTeamByUserID } = require('../db/TeamQueries')
+const { getTeamByUserID, getTeamByID, updateTeam} = require('../db/TeamQueries')
 const { createOrder } = require('../db/OrderQueries')
 const { deletePlayer } = require('../common/playerService')
 
@@ -74,7 +74,15 @@ router.patch('/', verify , async (req,res) => {
         }
         if(req.body.marketvalue) {
             if(user.role !== 'ADMIN') throw "You cannot change market value of player"
+            let oldValue = parseFloat(player.marketvalue);
             player['marketvalue'] = req.body.marketvalue;
+
+            //update team value
+            let team = await getTeamByID(player.team_id);
+            team.value = parseFloat(team.value) + parseFloat(req.body.marketvalue) - oldValue;
+            console.log(team);
+            await updateTeam(team);
+
         }
 
         let updatedPlayer = await updatePlayer(player);
