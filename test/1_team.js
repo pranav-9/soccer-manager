@@ -29,8 +29,7 @@ describe('Team Unit Testing', () => {
     });  
     
     describe('/Get teams - admin', () => {
-        it('get all teams -admin', (done) => {       
-            console.log(admin_token);     
+        it('get all teams -admin', (done) => {  
             chai.request(server)
                 .get('/api/team')
                 .set({ "auth-token": admin_token })
@@ -185,7 +184,7 @@ describe('Team Unit Testing', () => {
             .query({"id": team_id})
             .send()
             .end((err, res) => {
-                    console.log(res.body);
+                    // console.log(res.body);
                     // console.log(res.text);
                     res.should.have.status(200);
                     res.body.should.be.a('object');

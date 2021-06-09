@@ -30,8 +30,7 @@ describe('Player Unit Testing', () => {
     });  
     
     describe('/Get players - admin', () => {
-        it('get all players -admin', (done) => {       
-            console.log(admin_token);     
+        it('get all players -admin', (done) => {      
             chai.request(server)
                 .get('/api/player')
                 .set({ "auth-token": admin_token })
@@ -119,8 +118,8 @@ describe('Player Unit Testing', () => {
             .query({"id": user_player_id})
             .send(player)
             .end((err, res) => {
-                    console.log(res.body);
-                    console.log(res.text);
+                    // console.log(res.body);
+                    // console.log(res.text);
                     res.should.have.status(200);
                     res.body.should.be.a('object');
                     res.body.should.have.property('id');
@@ -138,7 +137,7 @@ describe('Player Unit Testing', () => {
             .query({"id": player_id})
             .send()
             .end((err, res) => {
-                    console.log(res.body);
+                    // console.log(res.body);
                     // console.log(res.text);
                     res.should.have.status(200);
                     res.body.should.be.a('object');

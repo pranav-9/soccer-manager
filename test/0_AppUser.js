@@ -50,7 +50,8 @@ describe('User Registration', () => {
             .send(user)
             .end((err, res) => {
                     res.should.have.status(200);
-                    user_token = res.text;
+                    // console.log(res.header);
+                    user_token = res.header["auth-token"];
                     // console.log(user_token,getUserToken());
                 done();
             });
@@ -70,7 +71,7 @@ describe('User Registration', () => {
             .send(user)
             .end((err, res) => {
                     res.should.have.status(200);
-                    admin_token = res.text;
+                    admin_token = res.header["auth-token"];
                 done();
             });
         });
