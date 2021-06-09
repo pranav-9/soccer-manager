@@ -25,7 +25,7 @@ describe('Player Unit Testing', () => {
         user_token = getUserToken();
         admin_token = getAdminToken();
         user_player_id = getUserPlayerID();
-        console.log(" tokens : ", user_token, admin_token , user_player_id);
+        // console.log(" tokens : ", user_token, admin_token , user_player_id);
         done()
     });  
     
